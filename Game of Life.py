@@ -12,8 +12,6 @@ class App(tk.Tk):
           tk.Tk.__init__(self, *args, **kwargs)
           self.canvas = tk.Canvas(self, width=500, height=500, borderwidth=0, highlightthickness=0)
           self.canvas.pack(side="top", fill="both", expand="true")
-        #self.rows = 150
-       # self.columns = 150
           self.cellwidth = 25
           self.cellheight = 25
 
@@ -31,25 +29,25 @@ class App(tk.Tk):
    
 
           arena = [[0,0,0,0,0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0],
-                       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                   [0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0],
-                   [0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0],
-                   [0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0],
-                   [0,0,0,0,0,0,1,0,0,1,0,1,0,0,0,0,0,0,0,0],
-                   [0,0,0,0,0,0,0,0,1,1,0,1,0,0,0,0,0,0,0,0],
-                   [0,0,0,0,0,0,0,1,1,1,1,0,1,0,0,0,0,0,0,0],
-                   [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                   [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                   [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                   [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                   [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                   [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                        [0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]
+                    [0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,1,0,1,1,0,1,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0,1,1,0,1,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                    [0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]
           self.redraw(200, arena)
 
     def redraw(self, delay, arena):
@@ -99,12 +97,12 @@ class App(tk.Tk):
                   kaimynuSkaicius +=arena[kaimynaiVirsujeIndex][kaimynaiKairejeIndex]+arena[kaimynaiVirsujeIndex][k]+arena[kaimynaiVirsujeIndex][kaimynaiDesnejeIndex]+arena[i][kaimynaiDesnejeIndex]+arena[i][kaimynaiKairejeIndex]+arena[kaimynaiApaciojeIndex][kaimynaiKairejeIndex]+arena[kaimynaiApaciojeIndex][kaimynaiDesnejeIndex]+arena[kaimynaiApaciojeIndex][k]
                   
                   if (arena[i][k] == 1 and kaimynuSkaicius < 2) or (arena[i][k] == 1 and kaimynuSkaicius > 3):
-                       turiPakisti.append([i, k, "mirtis"])
+                       turiPakisti.append([i, k, "death"])
                   elif (arena[i][k] == 0 and kaimynuSkaicius == 3) or arena[i][k] == 1:
-                       turiPakisti.append([i, k, "gyvybe"])
+                       turiPakisti.append([i, k, "life"])
           try:
                for kitimas in range(0, len(turiPakisti)):
-                    if turiPakisti[kitimas][2] == "mirtis":
+                    if turiPakisti[kitimas][2] == "death":
                          arena[turiPakisti[kitimas][0]][turiPakisti[kitimas][1]] = 0
                     else:
                          arena[turiPakisti[kitimas][0]][turiPakisti[kitimas][1]] = 1
@@ -117,7 +115,7 @@ class App(tk.Tk):
                  row = turiPakisti[i][0]
                  col = turiPakisti[i][1]
                  item_id = self.oval[row,col]
-                 if turiPakisti[i][2] == "mirtis":
+                 if turiPakisti[i][2] == "death":
                       self.canvas.itemconfig(item_id, fill="blue")
                  else:
                       self.canvas.itemconfig(item_id, fill="green")
