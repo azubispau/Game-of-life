@@ -1,2 +1,2 @@
 # Game-of-life
-Simple python game of life version with visualization. Not the best solution, just funning.
+Simple python game of life version with visualization. Very bad solution which I made as a kid.
