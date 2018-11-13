@@ -1,2 +1,3 @@
 # Game-of-life
-Simple python game of life version with visualization. Very bad solution which I made as a kid.
+Simple python game of life version with visualization made using Tkinter.
+A very bad and slow solution which I've made as a kid for fun.

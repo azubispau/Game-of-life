@@ -12,32 +12,32 @@ Coordinate = namedtuple('Coordinates', 'x y')
 
 
 class App(tk.Tk):
-    def __init__(self, coordinates_to_put_live, *args, **kwargs):
+    def __init__(self, coordinates_to_put_live, rng, delay=500, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
-        self.canvas = tk.Canvas(self, width=200, height=200, borderwidth=0, highlightthickness=0)
+        self.delay = delay
+        self.rng = rng
+        self.size = 10*self.rng
+        self.canvas = tk.Canvas(self, width=self.size, height=self.size, borderwidth=0, highlightthickness=1)
         self.canvas.pack(side="top", fill="both", expand="true")
         self.cellwidth = 10
         self.cellheight = 10
-        self.rng = 20
-        self.rect = {}
         self.oval = {}
         self.coordinates_to_put_live = coordinates_to_put_live
 
         for column in range(self.rng):
             for row in range(self.rng):
-                x1 = column*self.cellwidth
+                x1 = column * self.cellwidth
                 y1 = row * self.cellheight
                 x2 = x1 + self.cellwidth
                 y2 = y1 + self.cellheight
-                self.rect[row, column] = self.canvas.create_rectangle(x1, y1, x2, y2, fill="blue", tags="rect")
-                self.oval[row, column] = self.canvas.create_rectangle(x1+2, y1+2, x2-2, y2-2, fill="blue", tags="rect")
+                self.oval[row, column] = self.canvas.create_rectangle(x1+2, y1+2, x2-2, y2-2, tags="rect")
 
         arena = [[0 for _ in range(self.rng)] for _ in range(self.rng)]
 
         for coordinate in self.coordinates_to_put_live:
             arena[coordinate.x][coordinate.y] = 1
 
-        self.redraw(500, arena)
+        self.redraw(self.delay, arena)
 
     def redraw(self, delay, arena):
 
@@ -49,10 +49,7 @@ class App(tk.Tk):
                 number_of_neighbor = 0
                 neighbor_below_index = 0
 
-                if i == 0:
-                    neighbor_above_index = len(arena) - 1
-                else:
-                    neighbor_above_index = i - 1
+                neighbor_above_index = len(arena) - 1 if i == 0 else i - 1
 
                 if i != len(arena)-1:
                     neighbor_below_index = i + 1
@@ -67,8 +64,8 @@ class App(tk.Tk):
                     neighbor_to_the_right_index = k + 1
                     neighbor_to_the_left_index = k - 1
 
-                number_of_neighbor += arena[
-                                          neighbor_above_index][neighbor_to_the_left_index]+arena[
+                # sum everything that is around current cell
+                number_of_neighbor += arena[neighbor_above_index][neighbor_to_the_left_index]+arena[
                     neighbor_above_index][k]+arena[neighbor_above_index][neighbor_to_the_right_index]+arena[i][
                     neighbor_to_the_right_index]+arena[i][neighbor_to_the_left_index]+arena[neighbor_below_index][
                     neighbor_to_the_left_index]+arena[neighbor_below_index][neighbor_to_the_right_index]+arena[
@@ -94,7 +91,7 @@ class App(tk.Tk):
         self.after(delay, lambda: self.redraw(delay, arena))
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 
     coordinate_1 = Coordinate(x=4, y=5)
     coordinate_2 = Coordinate(x=4, y=6)
@@ -102,6 +99,6 @@ if __name__ == "__main__":
 
     coordinates_to_put_live = [coordinate_1, coordinate_2, coordinate_3]
 
-    app = App(coordinates_to_put_live=coordinates_to_put_live)
+    app = App(coordinates_to_put_live=coordinates_to_put_live, rng=25)
     app.mainloop()
 
