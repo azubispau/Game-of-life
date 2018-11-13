@@ -5,55 +5,46 @@ except ImportError:
     # for Python3
     import tkinter as tk   # notice lowercase 't' in tkinter here
 
+from collections import namedtuple
+
+
+Coordinate = namedtuple('Coordinates', 'x y')
+
 
 class App(tk.Tk):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, coordinates_to_put_live, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
-        self.canvas = tk.Canvas(self, width=500, height=500, borderwidth=0, highlightthickness=0)
+        self.canvas = tk.Canvas(self, width=200, height=200, borderwidth=0, highlightthickness=0)
         self.canvas.pack(side="top", fill="both", expand="true")
-        self.cellwidth = 25
-        self.cellheight = 25
-
+        self.cellwidth = 10
+        self.cellheight = 10
+        self.rng = 20
         self.rect = {}
         self.oval = {}
-        for column in range(20):
-            for row in range(20):
+        self.coordinates_to_put_live = coordinates_to_put_live
+
+        for column in range(self.rng):
+            for row in range(self.rng):
                 x1 = column*self.cellwidth
                 y1 = row * self.cellheight
                 x2 = x1 + self.cellwidth
                 y2 = y1 + self.cellheight
                 self.rect[row, column] = self.canvas.create_rectangle(x1, y1, x2, y2, fill="blue", tags="rect")
-                self.oval[row, column] = self.canvas.create_oval(x1+2, y1+2, x2-2, y2-2, fill="blue", tags="oval")
+                self.oval[row, column] = self.canvas.create_rectangle(x1+2, y1+2, x2-2, y2-2, fill="blue", tags="rect")
 
-        arena = [[0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
-                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+        arena = [[0 for _ in range(self.rng)] for _ in range(self.rng)]
 
-        self.redraw(200, arena)
+        for coordinate in self.coordinates_to_put_live:
+            arena[coordinate.x][coordinate.y] = 1
+
+        self.redraw(500, arena)
 
     def redraw(self, delay, arena):
 
         need_to_make_change = []
           
-        for i in range(0, len(arena)):
-            for k in range(0, len(arena[i])):
+        for i in range(len(arena)):
+            for k in range(len(arena[i])):
 
                 number_of_neighbor = 0
                 neighbor_below_index = 0
@@ -76,37 +67,41 @@ class App(tk.Tk):
                     neighbor_to_the_right_index = k + 1
                     neighbor_to_the_left_index = k - 1
 
-                number_of_neighbor += \
-                    arena[neighbor_above_index][neighbor_to_the_left_index]+arena[neighbor_above_index][k]+arena[neighbor_above_index][neighbor_to_the_right_index]+arena[i][neighbor_to_the_right_index]+arena[i][neighbor_to_the_left_index]+arena[neighbor_below_index][neighbor_to_the_left_index]+arena[neighbor_below_index][neighbor_to_the_right_index]+arena[neighbor_below_index][k]
+                number_of_neighbor += arena[
+                                          neighbor_above_index][neighbor_to_the_left_index]+arena[
+                    neighbor_above_index][k]+arena[neighbor_above_index][neighbor_to_the_right_index]+arena[i][
+                    neighbor_to_the_right_index]+arena[i][neighbor_to_the_left_index]+arena[neighbor_below_index][
+                    neighbor_to_the_left_index]+arena[neighbor_below_index][neighbor_to_the_right_index]+arena[
+                    neighbor_below_index][k]
 
                 if (arena[i][k] == 1 and number_of_neighbor < 2) or (arena[i][k] == 1 and number_of_neighbor > 3):
                     need_to_make_change.append([i, k, "death"])
                 elif (arena[i][k] == 0 and number_of_neighbor == 3) or arena[i][k] == 1:
                     need_to_make_change.append([i, k, "life"])
-        try:
-            for change in range(0, len(need_to_make_change)):
-                if need_to_make_change[change][2] == "death":
-                    arena[need_to_make_change[change][0]][need_to_make_change[change][1]] = 0
-                else:
-                    arena[need_to_make_change[change][0]][need_to_make_change[change][1]] = 1
-        except:
-            raise Exception("No changes made")
-        self.canvas.itemconfig("rect", fill="blue")
-        self.canvas.itemconfig("oval", fill="blue")
-        for i in range(0, len(need_to_make_change)):
+        for change in range(len(need_to_make_change)):
+            alive = 0 if need_to_make_change[change][2] == "death" else 1
+            arena[need_to_make_change[change][0]][need_to_make_change[change][1]] = alive
+
+        self.canvas.itemconfig("rect", fill="white")
+        for i in range(len(need_to_make_change)):
 
             row = need_to_make_change[i][0]
             col = need_to_make_change[i][1]
             item_id = self.oval[row, col]
-            if need_to_make_change[i][2] == "death":
-                self.canvas.itemconfig(item_id, fill="blue")
-            else:
-                self.canvas.itemconfig(item_id, fill="green")
+            fill = "white" if need_to_make_change[i][2] == "death" else "black"
+            self.canvas.itemconfig(item_id, fill=fill)
 
         self.after(delay, lambda: self.redraw(delay, arena))
-          
+
 
 if __name__ == "__main__":
-    app = App()
+
+    coordinate_1 = Coordinate(x=4, y=5)
+    coordinate_2 = Coordinate(x=4, y=6)
+    coordinate_3 = Coordinate(x=4, y=7)
+
+    coordinates_to_put_live = [coordinate_1, coordinate_2, coordinate_3]
+
+    app = App(coordinates_to_put_live=coordinates_to_put_live)
     app.mainloop()
 
